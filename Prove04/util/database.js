@@ -8,20 +8,20 @@ const mongoConnect = (callback) =>{
 MongoClient.connect('mongodb+srv://ashleyw:Citihealth89@cluster0.nrjfq.mongodb.net/shop?retryWrites=true&w=majority')
 .then(client => {
     console.log('Connected!');
-    _db = client.db()
+    _db = client.db();
     callback();
-    })
-.then().catch(err =>
-    {console.log(err);
-        throw err;
-    });
+  })
+  .catch(err => {
+    console.log(err);
+    throw err;
+  });
 };
 
 const getDb = () => {
-    if (_db) {
-        return _db;
-    }
-    throw 'No database found';
+if (_db) {
+  return _db;
+}
+throw 'No database found!';
 };
 
 exports.mongoConnect = mongoConnect;
