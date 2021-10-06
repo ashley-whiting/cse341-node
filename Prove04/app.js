@@ -39,7 +39,7 @@ const PORT = process.env.PORT || 3000;
 
 mongoose.connect('mongodb+srv://ashleyw:Citihealth89@cluster0.nrjfq.mongodb.net/shop?retryWrites=true&w=majority')
 .then(result => {
-  User.findeOne()
+  User.findOne()
   .then(user => {
     if (!user){
     const user = new User(
