@@ -22,19 +22,36 @@ exports.getSignup = (req, res, next) => {
   
 
 exports.postLogin = (req, res, next) => {
-    User.findById('615e15e1281b388598282aa3')
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({email: email})
     .then(user => {
-        req.session.isLoggedIn = true;
-        req.session.user = user;
-        req.session.save((err) => {
+        if (!user) {
+            return res.redirect('/login');
+        }
+        bcrypt.compare(password, user.password)
+        .then(doMatch => {
+            if (doMatch) {
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+               return req.session.save(err => {
+                    console.log(err);
+                    return res.redirect('/');
+                });
+            }
+            res.redirect('/login');
+        })
+    
+        .catch(err => {
             console.log(err);
-            res.redirect('/');
+            res.redirect('/login');
         });
-        
+
     })
     .catch(err => console.log(err));
- 
 };
+      
+   
 
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
@@ -45,21 +62,20 @@ exports.postSignup = (req, res, next) => {
         if (userDoc) {
             return res.redirect('/signup');
         }
-        return bcrypt.hash(password, 12);
-        
-    })
-    .then(hashedPassword => {
-        const user = new User({
-            email: email,
-            password: password,
-            cart: {items: [] }
-        });
-        return user.save();
-
-    })
-        .then(result => {
-            res.redirect('/login');
+        return bcrypt.hash(password, 12)
+        .then(hashedPassword => {
+            const user = new User({
+                email: email,
+                password: hashedPassword,
+                cart: {items: [] }
+            });
+            return user.save();
+    
         })
+            .then(result => {
+                res.redirect('/login');
+            });
+      })   
         .catch(err => {
         console.log(err);
     });
