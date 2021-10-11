@@ -53,23 +53,8 @@ const PORT = process.env.PORT || 3000;
 
 mongoose.connect(MONGODB_URI)
 .then(result => {
-  User.findOne()
-  .then(user => {
-    if (!user){
-    const user = new User(
-      {
-        name: 'Ashley',
-        email: 'ashley@books.org',
-        cart: {
-          items: []
-        }
-      });
-    user.save();
-  }
-});  
-  app.listen(3000);
+   app.listen(3000);
 })
-
 .catch(err => {
   console.log(err);
 });
