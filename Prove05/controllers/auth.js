@@ -1,21 +1,24 @@
+const User = require('../models/user');
+
 exports.getLogin = (req, res, next) => {
-    // const isLoggedIn = req
-    // .get('Cookie')
-    // .split(';')[0]
-    // .trim()
-    // .split('=')[0] === 'true';
+    console.log(req.session.isLoggedIn);
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isAuthenticated: isLoggedIn
+        isAuthenticated: false
 
     });
 };
 
 exports.postLogin = (req, res, next) => {
-    res.setHeader('Set-Cookie', 'loggedIn=true; HttpOnly');
-    //Max-Age=100'
-   
-    res.redirect('/');
+    User.findById('615e15e1281b388598282aa3')
+    .then(user => {
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        res.redirect('/');
+        
+    })
+    .catch(err => console.log(err));
  
 };
+
