@@ -35,7 +35,7 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 mongoose.connect('mongodb+srv://ashleyw:Citihealth89@cluster0.nrjfq.mongodb.net/shop?retryWrites=true&w=majority')
 .then(result => {
@@ -53,7 +53,8 @@ mongoose.connect('mongodb+srv://ashleyw:Citihealth89@cluster0.nrjfq.mongodb.net/
     user.save();
   }
 });  
-  app.listen(3000);
+app.listen(PORT, () => console.log('Listening on ${PORT}'));
+  //app.listen(5000);
 })
 
 .catch(err => {
